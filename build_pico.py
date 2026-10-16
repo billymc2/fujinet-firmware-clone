@@ -961,9 +961,9 @@ def preflight(cfg: PicoConfig) -> None:
 
 
 def _stale_cmake_cache(cfg: PicoConfig) -> bool:
-    """True when the build dir was configured against a different pico-sdk or
-    compiler than this build would use, which the skip-configure shortcut in
-    build() would otherwise reuse."""
+    """True when the build dir was configured against a different pico-sdk,
+    compiler, board or build type than this build would use, which the
+    skip-configure shortcut in build() would otherwise reuse."""
     try:
         with open(os.path.join(cfg.build_dir_abs, "CMakeCache.txt")) as f:
             cache = dict(re.match(r"([^:=]+)(?::[^=]*)?=(.*)", line).groups()
@@ -976,15 +976,21 @@ def _stale_cmake_cache(cfg: PicoConfig) -> bool:
     gcc = shutil.which("arm-none-eabi-gcc", path=tool_path(cfg))
     if gcc and "arm-none-eabi-gcc" in cfg.toolchain:
         current["CMAKE_C_COMPILER"] = gcc
-    return any(key in cache and os.path.realpath(cache[key].strip()) != os.path.realpath(value)
-               for key, value in current.items())
+    if any(key in cache and os.path.realpath(cache[key].strip()) != os.path.realpath(value)
+           for key, value in current.items()):
+        return True
+    # Two boards can share one pico_src and build dir.
+    wanted = {"CMAKE_BUILD_TYPE": cfg.build_type}
+    if cfg.pico_board:
+        wanted["PICO_BOARD"] = cfg.pico_board
+    return any(key in cache and cache[key].strip() != value for key, value in wanted.items())
 
 
 def build(cfg: PicoConfig, reconfigure: bool = False, dry_run: bool = False) -> None:
     build_dir_abs = cfg.build_dir_abs
     if cfg.build_mode in CMAKE_MODES and not dry_run and _stale_cmake_cache(cfg):
-        log(f"[{cfg.board}] {build_dir_abs} was configured with a different pico-sdk or "
-            f"compiler -- removing it")
+        log(f"[{cfg.board}] {build_dir_abs} was configured with a different pico-sdk, "
+            f"compiler, board or build type -- removing it")
         shutil.rmtree(build_dir_abs)
     if not dry_run:
         os.makedirs(build_dir_abs, exist_ok=True)
