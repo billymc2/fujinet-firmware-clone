@@ -33,7 +33,8 @@ both the bus's `virtualDevice` and the shared base. The subclass implements the 
 
 [Cartridge/](Cartridge/) is shared the same way but is not a bus device: `Cartridge` pushes ROMs to
 a companion MCU over the bus's `DBCLink` (see [lib/bus/](../bus/)), with one subclass per companion
-firmware, and the bus's Fuji owns one.
+firmware, and the bus's Fuji owns one. `CartSDClient` reads the SD card wired to such a
+companion over the same link.
 
 ## Naming
 

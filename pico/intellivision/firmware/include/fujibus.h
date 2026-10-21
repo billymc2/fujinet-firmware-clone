@@ -16,19 +16,25 @@
 
 // FUJI_DEVICEID_DBC: the ESP32-S3 addresses this device, not us, when it
 // pushes a ROM (and an optional .cfg sibling) to the RP2040 mid-
-// MOUNT_IMAGE-transaction -- see the inbound-frame demux in
-// fujibus_usb.c and its handler, dbc_inbound_handler(), in inty_cart.c.
+// MOUNT_IMAGE-transaction, or reads our SD card (cartsd.c) -- see the
+// inbound-frame demux in fujibus_usb.c and dbc_inbound_handler() in fujinet.c.
 // Matches FUJI_DEVICEID_DBC in the main tree's include/fujiDeviceID.h.
 #define FUJI_DEVICEID_DBC 0xFF
 
 // NETCMD_*: matches include/fujiCommandID.h in the main tree. Reused here
 // (rather than FUJICMD_*) because that's what the ESP32-S3 side's
-// rs232Disk::mount() actually sends -- see push_stream() in
-// lib/device/rs232/disk.cpp.
+// ROM push actually sends -- see lib/device/Cartridge/StreamCartridge.cpp,
+// and CartSDClient.cpp for READ.
 #define NETCMD_OPEN  0x4F
 #define NETCMD_WRITE 0x57
+#define NETCMD_READ  0x52
 #define NETCMD_CLOSE 0x43
 
+#define FUJICMD_OPEN_DIRECTORY 0xF7
+#define FUJICMD_READ_DIR_ENTRY 0xF6
+#define FUJICMD_CLOSE_DIRECTORY 0xF5
+#define FUJICMD_GET_DIRECTORY_POSITION 0xE5
+#define FUJICMD_SET_DIRECTORY_POSITION 0xE4
 #define FUJICMD_GET_ADAPTERCONFIG_EXTENDED 0xC4
 #define FUJICMD_MOUNT_IMAGE 0xF8
 #define FUJICMD_SET_DEVICE_FULLPATH 0xE2
@@ -53,11 +59,15 @@ typedef struct {
     uint8_t size;
 } fb_param_t;
 
+#define FB_MAX_PARAMS 8
+
 typedef struct {
     uint8_t device;
     uint8_t command;   // FUJICMD_ACK or FUJICMD_NAK
     const uint8_t *data;
     uint16_t data_len;
+    uint8_t nparams;   // params past FB_MAX_PARAMS are skipped
+    uint32_t params[FB_MAX_PARAMS];
 } fb_reply_t;
 
 // Builds a SLIP-framed FujiBus request for `device`/`command` with the given

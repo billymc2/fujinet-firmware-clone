@@ -8,7 +8,8 @@
 class rs232DBCLink : public DBCLink
 {
 protected:
-    std::unique_ptr<FujiBusPacket> exchange(FujiBusPacket &packet) override;
+    success_is_true send(FujiBusPacket &packet) override;
+    std::unique_ptr<FujiBusPacket> receive() override;
 };
 
 #endif /* RS232DBCLINK_H */

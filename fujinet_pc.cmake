@@ -206,6 +206,7 @@ set(SOURCES src/main.cpp
     lib/FileSystem/fnFS.h lib/FileSystem/fnFS.cpp
     lib/FileSystem/fnFsSPIFFS.h lib/FileSystem/fnFsSPIFFS.cpp
     lib/FileSystem/fnFsSD.h lib/FileSystem/fnFsSD.cpp
+    lib/FileSystem/fnFsRemote.h lib/FileSystem/fnFsRemote.cpp
     lib/FileSystem/fnFsTNFS.h lib/FileSystem/fnFsTNFS.cpp
     lib/FileSystem/fnFsSMB.h lib/FileSystem/fnFsSMB.cpp
     lib/FileSystem/fnFsNFS.h lib/FileSystem/fnFsNFS.cpp
@@ -450,7 +451,7 @@ if(FUJINET_TARGET STREQUAL "COCO")
 
     lib/bus/drivewire/drivewire.h lib/bus/drivewire/drivewire.cpp
     lib/bus/drivewire/FujiDWPacket.h lib/bus/drivewire/FujiDWPacket.cpp
-    lib/bus/DBCLink.h lib/bus/drivewire/drivewireDBCLink.h lib/bus/drivewire/drivewireDBCLink.cpp
+    lib/bus/DBCLink.h lib/bus/DBCLink.cpp lib/bus/drivewire/drivewireDBCLink.h lib/bus/drivewire/drivewireDBCLink.cpp
     lib/hardware/BoIPChannel.h lib/hardware/BoIPChannel.cpp
 
     lib/media/drivewire/mediaType.h lib/media/drivewire/mediaType.cpp
@@ -514,7 +515,7 @@ if(FUJINET_TARGET STREQUAL "RS232")
 
     lib/bus/rs232/rs232.h lib/bus/rs232/rs232.cpp
     lib/bus/rs232/FujiBusPacket.h lib/bus/rs232/FujiBusPacket.cpp
-    lib/bus/DBCLink.h lib/bus/rs232/rs232DBCLink.h lib/bus/rs232/rs232DBCLink.cpp
+    lib/bus/DBCLink.h lib/bus/DBCLink.cpp lib/bus/rs232/rs232DBCLink.h lib/bus/rs232/rs232DBCLink.cpp
     lib/hardware/BoIPChannel.h lib/hardware/BoIPChannel.cpp
 
     lib/media/rs232/diskType.h lib/media/rs232/diskType.cpp
@@ -526,6 +527,7 @@ if(FUJINET_TARGET STREQUAL "RS232")
     lib/device/rs232/rs232Clock.cpp lib/device/rs232/rs232Clock.h
     lib/device/Cartridge/Cartridge.h lib/device/Cartridge/Cartridge.cpp
     lib/device/Cartridge/StreamCartridge.h lib/device/Cartridge/StreamCartridge.cpp
+    lib/device/Cartridge/CartSDClient.h lib/device/Cartridge/CartSDClient.cpp
     lib/device/rs232/disk.cpp lib/device/rs232/disk.h
     lib/device/rs232/modem.cpp lib/device/rs232/modem.h
     lib/device/rs232/rs232Network.cpp lib/device/rs232/rs232Network.h

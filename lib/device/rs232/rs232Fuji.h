@@ -15,6 +15,8 @@ private:
     StreamCartridge _cartridge{_dbc};
 
 protected:
+    DBCLink &dbc() { return _dbc; }
+
     size_t set_additional_direntry_details(fsdir_entry_t *f, uint8_t *dest,
                                            uint8_t maxlen) override;
 

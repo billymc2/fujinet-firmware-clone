@@ -9,7 +9,8 @@
 class drivewireDBCLink : public DBCLink
 {
 protected:
-    std::unique_ptr<FujiBusPacket> exchange(FujiBusPacket &packet) override;
+    success_is_true send(FujiBusPacket &packet) override;
+    std::unique_ptr<FujiBusPacket> receive() override;
 };
 
 #endif /* DRIVEWIREDBCLINK_H */

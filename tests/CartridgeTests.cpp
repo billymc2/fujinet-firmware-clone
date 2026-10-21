@@ -23,9 +23,14 @@ public:
     std::deque<Reply> replies; // ACK once exhausted
 
 protected:
-    std::unique_ptr<FujiBusPacket> exchange(FujiBusPacket &packet) override
+    success_is_true send(FujiBusPacket &packet) override
     {
         sent.push_back(packet.serialize());
+        RETURN_SUCCESS_AS_TRUE();
+    }
+
+    std::unique_ptr<FujiBusPacket> receive() override
+    {
         Reply r = Reply::Ack;
         if (!replies.empty())
         {

@@ -8,6 +8,7 @@ cartridge board.
 |---|---|
 | `rs232Fuji.h`, `rs232Fuji.cpp` | `rs232Fuji : fujiDevice` (`.img` images, MS-DOS lobby) |
 | `h89Fuji.h` | `h89Fuji : rs232Fuji`, the H89 card's Fuji; mounts no boot disk, since the MS-DOS one means nothing to CP/M or HDOS |
+| `cartSDFuji.h` | `cartSDFuji : rs232Fuji`, for boards whose SD card is wired to the cartridge MCU; serves the "SD" host from it unless a card mounted on our own pins |
 | `disk.h`, `disk.cpp` | `rs232Disk`, the `DISK_DEVICE`; `mount()` takes the owning `fujiHost` so `MediaTypeROM` can open a memory-map sibling file |
 | `rs232Network.h`, `rs232Network.cpp` | `rs232Network : NDevice` |
 | `rs232Clock.h`, `rs232Clock.cpp` | `rs232Clock : fujiClock`; defines `platformClock` |
@@ -23,7 +24,8 @@ cartridge board.
   [lib/device/Cartridge/](../Cartridge/)) and `appkey_read()`. `rs232Network`
   overrides `fujidev_set_query()`.
   `rs232Clock` overrides `fujidev_read_tz()` and `fujidev_alt_requested()`.
-- [lib/device/device.h](../device.h) defines `platformFuji`, an `h89Fuji` under `PINMAP_H89` and
+- [lib/device/device.h](../device.h) defines `platformFuji`, an `h89Fuji` under `PINMAP_H89`, a
+  `cartSDFuji` under `HAS_CART_SD_BRIDGE` and
   an `rs232Fuji` otherwise, and points `theFuji` at it.
 - `src/main.cpp` adds the Fuji, clock, printer and modem devices.
 

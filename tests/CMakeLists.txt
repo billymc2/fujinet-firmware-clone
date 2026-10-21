@@ -43,6 +43,7 @@ add_executable(cartridge_tests
     ${CMAKE_SOURCE_DIR}/lib/device/Cartridge/Cartridge.cpp
     ${CMAKE_SOURCE_DIR}/lib/device/Cartridge/StreamCartridge.cpp
     ${CMAKE_SOURCE_DIR}/lib/device/Cartridge/SegmentCartridge.cpp
+    ${CMAKE_SOURCE_DIR}/lib/bus/DBCLink.cpp
     ${CMAKE_SOURCE_DIR}/lib/bus/rs232/FujiBusPacket.cpp
 )
 
@@ -57,6 +58,31 @@ target_include_directories(cartridge_tests PRIVATE
 )
 
 add_test(NAME cartridge_tests COMMAND cartridge_tests)
+
+# ------------------------------------------------------------------------------
+# lib/device/Cartridge/CartSDClient over a fake cart that echoes each tag.
+# ------------------------------------------------------------------------------
+add_executable(cartsdclient_tests
+    CartSDClientTests.cpp
+    ${CMAKE_SOURCE_DIR}/lib/device/Cartridge/CartSDClient.cpp
+    ${CMAKE_SOURCE_DIR}/lib/bus/DBCLink.cpp
+    ${CMAKE_SOURCE_DIR}/lib/bus/rs232/FujiBusPacket.cpp
+)
+
+# BUILD_RS232 selects FileHandler in fnFsRemote.h; UNIT_TESTS as for cartridge_tests
+target_compile_definitions(cartsdclient_tests PRIVATE BUILD_RS232 UNIT_TESTS)
+
+target_include_directories(cartsdclient_tests PRIVATE
+    ${CMAKE_SOURCE_DIR}/include/
+    ${CMAKE_SOURCE_DIR}/lib/
+    ${CMAKE_SOURCE_DIR}/lib/bus/
+    ${CMAKE_SOURCE_DIR}/lib/FileSystem/
+    ${CMAKE_SOURCE_DIR}/lib/compat/
+    ${CMAKE_SOURCE_DIR}/lib/utils/
+    ${CMAKE_SOURCE_DIR}/components_pc/
+)
+
+add_test(NAME cartsdclient_tests COMMAND cartsdclient_tests)
 
 # ------------------------------------------------------------------------------
 # UTF-8 / HTML-entity folding to ASCII. fn_sanitize is deliberately free of any
@@ -289,6 +315,29 @@ if(WIN32)
 endif()
 
 add_test(NAME mediatypeimd_tests COMMAND mediatypeimd_tests)
+
+# ------------------------------------------------------------------------------
+# FileSystemRemote over a fake RemoteStorage. BUILD_RS232 selects FileHandler.
+# ------------------------------------------------------------------------------
+add_executable(fsremote_tests
+    FileSystemRemoteTests.cpp
+    ${CMAKE_SOURCE_DIR}/lib/FileSystem/fnFsRemote.cpp
+    ${CMAKE_SOURCE_DIR}/lib/FileSystem/fnFS.cpp
+    ${CMAKE_SOURCE_DIR}/lib/FileSystem/fnFile.cpp
+)
+
+target_compile_definitions(fsremote_tests PRIVATE BUILD_RS232 UNIT_TESTS)
+
+target_include_directories(fsremote_tests PRIVATE
+    ${CMAKE_SOURCE_DIR}/include/
+    ${CMAKE_SOURCE_DIR}/lib/
+    ${CMAKE_SOURCE_DIR}/lib/FileSystem/
+    ${CMAKE_SOURCE_DIR}/lib/compat/
+    ${CMAKE_SOURCE_DIR}/lib/utils/
+    ${CMAKE_SOURCE_DIR}/components_pc/
+)
+
+add_test(NAME fsremote_tests COMMAND fsremote_tests)
 
 # ------------------------------------------------------------------------------
 # The RS232 MediaTypeAltair adapter, built like mediatypeimd_tests above.

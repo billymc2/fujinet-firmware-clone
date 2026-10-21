@@ -10,6 +10,7 @@ The cartridge on the far side of a companion MCU: mounted ROMs are pushed into i
 | `Cartridge.h`, `Cartridge.cpp` | `Cartridge`: the link, `Source`, `accepted()`, `write_blocks()` |
 | `StreamCartridge.h`, `StreamCartridge.cpp` | `StreamCartridge : Cartridge` |
 | `SegmentCartridge.h`, `SegmentCartridge.cpp` | `SegmentCartridge : Cartridge` |
+| `CartSDClient.h`, `CartSDClient.cpp` | `CartSDClient : RemoteStorage`, the client for the cart's SD card server (`pico/intellivision` `cartsd.c`) |
 
 ## How it works
 
@@ -27,10 +28,11 @@ The cartridge on the far side of a companion MCU: mounted ROMs are pushed into i
 - The bus supplies the link: `rs232DBCLink` in [lib/bus/rs232/](../../bus/rs232/),
   `drivewireDBCLink` in [lib/bus/drivewire/](../../bus/drivewire/).
 - The Fuji's `mount_media()` override loads a mounted ROM; a failed push fails the mount.
-- Covered by `cartridge_tests` (frames byte for byte against a fake link) and the
+- Covered by `cartridge_tests` (frames byte for byte against a fake link), `cartsdclient_tests`
+  (frames and tags against a fake cart) and the
   `no_build_ifdefs_in_fujidevice` ctest.
 
 ## Build
 
 ESP: globbed by `src/CMakeLists.txt` into every target. PC: `FUJINET_TARGET=RS232` lists
-`Cartridge` and `StreamCartridge`, `COCO` lists `Cartridge` and `SegmentCartridge`.
+`Cartridge`, `StreamCartridge` and `CartSDClient`; `COCO` lists `Cartridge` and `SegmentCartridge`.

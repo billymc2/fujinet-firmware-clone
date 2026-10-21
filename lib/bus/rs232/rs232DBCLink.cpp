@@ -4,9 +4,14 @@
 
 #include "rs232.h"
 
-std::unique_ptr<FujiBusPacket> rs232DBCLink::exchange(FujiBusPacket &packet)
+success_is_true rs232DBCLink::send(FujiBusPacket &packet)
 {
     SYSTEM_BUS.writeBusPacket(packet);
+    RETURN_SUCCESS_AS_TRUE();
+}
+
+std::unique_ptr<FujiBusPacket> rs232DBCLink::receive()
+{
     return SYSTEM_BUS.readBusPacket();
 }
 
