@@ -22,6 +22,7 @@ class fujiHost
 private:
     const char * _sdhostname = "SD";
     FileSystem *_fs = nullptr;
+    FileSystem *_local_fs = nullptr;
     fujiHostType _type;
     char _hostname[MAX_HOSTNAME_LEN] = { '\0' };
     char _prefix[MAX_HOST_PREFIX_LEN] = { '\0' };
@@ -47,6 +48,9 @@ public:
 
     void set_type(fujiHostType type);
     fujiHostType get_type() { return _type; };
+
+    // Serves the "SD" host instead of fnSDFAT; must outlive this host
+    void set_local_fs(FileSystem *local_fs) { _local_fs = local_fs; }
 
     void set_hostname(const char *hostname);
     const char* get_hostname(char *buffer, size_t buffersize);

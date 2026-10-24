@@ -31,6 +31,7 @@
 #include "fujibus_usb.h"
 #include "fujiboot.h"
 #include "fujinet.h"
+#include "cartsd.h"
 
 extern Cartridge cart;
 extern mm_map_t m;
@@ -264,6 +265,9 @@ bool dbc_inbound_handler(const fb_reply_t *req)
 {
     if (req->device != FUJI_DEVICEID_DBC)
         return false;
+
+    if (cartsd_inbound_handler(req))
+        return true;
 
     if (req->command == NETCMD_OPEN) {
         // Payload: stream id, optionally followed by the stream's total

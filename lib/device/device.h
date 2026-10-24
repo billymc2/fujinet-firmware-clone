@@ -47,6 +47,9 @@
 # ifdef PINMAP_H89
 #  include "rs232/h89Fuji.h"
     h89Fuji platformFuji;
+# elif defined(HAS_CART_SD_BRIDGE)
+#  include "rs232/cartSDFuji.h"
+    cartSDFuji platformFuji;
 # else
     rs232Fuji platformFuji;
 # endif

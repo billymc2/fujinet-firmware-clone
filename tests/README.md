@@ -9,6 +9,7 @@ Host-side unit tests and policy checks for the FujiNet-PC build. ctest runs them
 | `CMakeLists.txt` | One `add_executable` and `add_test` pair per test; each links only the unit under test, never the `fujinet` executable |
 | `FujiBusPacketTests.cpp` | `lib/bus/FujiBusPacket.cpp` SLIP framing (`fujibuspacket_tests`) |
 | `DaisyChainTests.cpp` | `lib/bus/DaisyChain.cpp` device-ID rotation behind the disk swap (`daisychain_tests`) |
+| `CartSDTests.cpp` | `lib/device/Cartridge/CartSDClient.cpp` frames, tags and stale-reply drop, and `lib/FileSystem/fnFsCartSD.cpp` listings and file reads, over a fake cart (`cartsd_tests`, with `FakeCart.cpp`; built with `BUILD_RS232`) |
 | `FnSanitizeTests.cpp` | `lib/fntext/fn_sanitize.cpp` entity decoding and UTF-8 folding (`fn_sanitize_tests`) |
 | `PeoplesUrlParserTests.cpp` | `lib/utils/peoples_url_parser.cpp` query and fragment splitting, and `getFilePath()` (`url_parser_tests`) |
 | `UtilsTests.cpp` | `lib/utils/utils.cpp` `util_stoi()` (`utils_tests`) |

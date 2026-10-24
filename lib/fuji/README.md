@@ -6,7 +6,7 @@ The host-slot and disk-slot model the CONFIG program manipulates: a host slot bi
 ## Layout
 | File | Defines |
 |---|---|
-| `fujiHost.h`, `fujiHost.cpp` | `fujiHost` and `fujiHostType`: `mount()` tries the local SD name first, then the smb, nfs, ftp, http and https URL schemes by prefix, and TNFS for anything else, creating the matching `FileSystem` backend; path prefix handling; `fnfile_open`, `file_size`, `file_remove`; directory iteration delegated to the backend |
+| `fujiHost.h`, `fujiHost.cpp` | `fujiHost` and `fujiHostType`: `mount()` tries the local SD name first (`fnSDFAT`, or the `FileSystem` given to `set_local_fs()`), then the smb, nfs, ftp, http and https URL schemes by prefix, and TNFS for anything else, creating the matching `FileSystem` backend; path prefix handling; `fnfile_open`, `file_size`, `file_remove`; directory iteration delegated to the backend |
 | `fujiDisk.h`, `fujiDisk.cpp` | `fujiDisk`: the open `fnFile`, access mode, media type, size, owning host and slot, filename, and an embedded `DISK_DEVICE` named `disk_dev`; `reset()` |
 
 ## How it fits

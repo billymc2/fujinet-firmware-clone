@@ -50,6 +50,8 @@ extra cost in the timing-critical path.
     `firmware/host_test/`).
   - `src/fujibus_usb.c`/`include/fujibus_usb.h` — TinyUSB CDC transport on top of the codec
     above (`fujibus_transact()`).
+  - `src/cartsd.c`/`include/cartsd.h` — answers the ESP32's DBC directory and file requests
+    from the cart's own SD card, so the "SD" host works on boards like `pirto_ii_duo`.
   - `include/fuji_mailbox.h` — the `$9C00-$9F3F` mailbox address map. Single source of truth
     for the RP2040/RP2350 side; `fujinet-config/intv/fujinet.bas` hardcodes the same offsets
     by hand (IntyBASIC has no `#include`).

@@ -35,6 +35,42 @@ target_include_directories(daisychain_tests PRIVATE
 add_test(NAME daisychain_tests COMMAND daisychain_tests)
 
 # ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# lib/device/Cartridge/CartSDClient and lib/FileSystem/fnFsCartSD over a fake
+# cart. BUILD_RS232, the DUO's bus, selects FileHandler. The two files that
+# include bus.h build without it, so the real rs232 bus stays out; the fake
+# cart brings its own SystemBusBase.
+# ------------------------------------------------------------------------------
+add_executable(cartsd_tests
+    CartSDTests.cpp
+    FakeCart.cpp
+    ${CMAKE_SOURCE_DIR}/lib/device/Cartridge/CartSDClient.cpp
+    ${CMAKE_SOURCE_DIR}/lib/FileSystem/fnFsCartSD.cpp
+    ${CMAKE_SOURCE_DIR}/lib/FileSystem/fnFS.cpp
+    ${CMAKE_SOURCE_DIR}/lib/FileSystem/fnFile.cpp
+    ${CMAKE_SOURCE_DIR}/lib/bus/DaisyChain.cpp
+    ${CMAKE_SOURCE_DIR}/lib/bus/FujiBusPacket.cpp
+)
+
+target_compile_definitions(cartsd_tests PRIVATE UNIT_TESTS)
+target_compile_options(cartsd_tests PRIVATE -U${FUJINET_BUILD_PLATFORM} -DBUILD_RS232)
+set_source_files_properties(FakeCart.cpp ${CMAKE_SOURCE_DIR}/lib/device/Cartridge/CartSDClient.cpp
+    PROPERTIES COMPILE_OPTIONS -UBUILD_RS232)
+
+target_include_directories(cartsd_tests PRIVATE
+    ${CMAKE_SOURCE_DIR}/include/
+    ${CMAKE_SOURCE_DIR}/lib/
+    ${CMAKE_SOURCE_DIR}/lib/bus/
+    ${CMAKE_SOURCE_DIR}/lib/device/Cartridge/
+    ${CMAKE_SOURCE_DIR}/lib/FileSystem/
+    ${CMAKE_SOURCE_DIR}/lib/compat/
+    ${CMAKE_SOURCE_DIR}/lib/utils/
+    ${CMAKE_SOURCE_DIR}/components_pc/
+)
+
+add_test(NAME cartsd_tests COMMAND cartsd_tests)
+
+# ------------------------------------------------------------------------------
 # UTF-8 / HTML-entity folding to ASCII. fn_sanitize is deliberately free of any
 # parser or protocol dependency, so the entity tables and the transliteration
 # edge cases are pinned here rather than on hardware.
