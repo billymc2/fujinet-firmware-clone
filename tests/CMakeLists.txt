@@ -51,6 +51,12 @@ add_executable(cartsd_tests
     ${CMAKE_SOURCE_DIR}/lib/bus/DaisyChain.cpp
     ${CMAKE_SOURCE_DIR}/lib/bus/FujiBusPacket.cpp
 )
+if(NOT CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+  target_sources(cartsd_tests PRIVATE
+      ${CMAKE_SOURCE_DIR}/lib/compat/strlcpy.c
+      ${CMAKE_SOURCE_DIR}/lib/compat/strlcat.c
+  )
+endif()
 
 target_compile_definitions(cartsd_tests PRIVATE UNIT_TESTS)
 target_compile_options(cartsd_tests PRIVATE -U${FUJINET_BUILD_PLATFORM} -DBUILD_RS232)
